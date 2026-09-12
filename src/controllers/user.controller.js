@@ -229,7 +229,7 @@ const getCurretnUser = asyncHandler(async (req , res) => {
 const updateAccountDetails = asyncHandler(async (req ,res) => {
     const {fullName , email} = req.body
     if(!fullName || email){
-        new ApiError(404 , "Enter all the fields")
+        throw new ApiError(404 , "Enter all the fields")
     }
 
     const user = await User.findByAndUpdate({
@@ -244,7 +244,7 @@ const updateAccountDetails = asyncHandler(async (req ,res) => {
     }).select("-password")
 
     if(!user){
-        new ApiError(400 , "User detials not updated ! Try again")
+        throw new ApiError(400 , "User detials not updated ! Try again")
     }
 
     res
@@ -254,6 +254,67 @@ const updateAccountDetails = asyncHandler(async (req ,res) => {
         )
 })
 
+const updateAvatarImage = asyncHandler(async (req , res) => {
+    const avatarLocalPath = req.file?.path
+
+    if(!avatarLocalPath){
+        throw new ApiError(400 , "Avatar file is missing")
+    }
+
+    const avatar = await uploadOnCloudinary(avatarLocalPath)
+
+    if(!avatar.url){
+        throw new ApiError(404 , "Error while uploading")
+    }
+
+    const user = await User.findByIdAndUpdate({_id : req.user._id} , {
+        $set : {
+            avatar : avatar.url
+        }
+    } , {new : true}).select("-password")
+
+    if(user){
+        res
+            .status(200)
+            .json(
+                new ApiResponse(200 , user , "Avatar image updated successfully")
+            )
+    }
+})
+
+const updateCoverImage = asyncHandler(async (req , res) => {
+    const coverImageLocalPath = req.file?.path
+
+    if(!coverImageLocalPath){
+        throw new ApiError(400 , "Cover image not uploaded")
+    }
+
+    const coverImage = await uploadOnCloudinary(coverImageLocalPath)
+
+    if(!coverImage.url){
+        throw new ApiError(400 , "Error in uploading cover image")
+    }
+
+    const user = await User.findByIdAndUpdate({
+        _id : req.user._id
+    },{
+        $set : {
+            coverImage : coverImage.url
+        }
+    }, {
+        new : true
+    }).select("-password")
+
+    if(user){
+        res
+        .res(200)
+        json(
+            new ApiResponse(200 , user  , "Cover image uploaded successfully" )
+        )
+    }
+
+})
+
 export {
     registerUser,
     loginUser,
@@ -261,5 +322,7 @@ export {
     refreshAccessToken,
     changeUserPassword,
     getCurretnUser,
-    updateAccountDetails
+    updateAccountDetails,
+    updateAvatarImage,
+    updateCoverImage
 }
