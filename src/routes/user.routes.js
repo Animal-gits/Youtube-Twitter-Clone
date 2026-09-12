@@ -3,7 +3,10 @@ import {loginUser,
     registerUser , 
     logoutUser , 
     refreshAccessToken, 
-    changeUserPassword} from '../controllers/user.controller.js'
+    changeUserPassword,
+    updateAccountDetails,
+    getCurretnUser,
+} from '../controllers/user.controller.js'
 import {upload} from '../middlewares/multer.middleware.js'
 import { protect } from '../middlewares/auth.middleware.js';
 const router = express.Router()
@@ -27,6 +30,8 @@ router.post("/refresh_token" , refreshAccessToken)
 //secured / protected routes
 router.post('/logout' ,protect, logoutUser)
 router.post("/change_password" , protect , changeUserPassword)
+router.get("/get_current_user" , protect , getCurretnUser)
+router.patch("/update_details" , protect , updateAccountDetails)
 
 
 

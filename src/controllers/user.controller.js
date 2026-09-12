@@ -218,10 +218,48 @@ const changeUserPassword = asyncHandler(async (req , res) => {
 
 })
 
+const getCurretnUser = asyncHandler(async (req , res) => {
+    res
+        .status(200)
+        .json(
+            new ApiResponse(200 , req.user , "User fetched successfully")
+        )
+})
+
+const updateAccountDetails = asyncHandler(async (req ,res) => {
+    const {fullName , email} = req.body
+    if(!fullName || email){
+        new ApiError(404 , "Enter all the fields")
+    }
+
+    const user = await User.findByAndUpdate({
+        _id : req.user._id
+    } , {
+        $set : {
+            fullName , 
+            email
+        }
+    } , {
+        new : true
+    }).select("-password")
+
+    if(!user){
+        new ApiError(400 , "User detials not updated ! Try again")
+    }
+
+    res
+        .status(200)
+        .json(
+            new ApiResponse(200 , user , "User update successfully")
+        )
+})
+
 export {
     registerUser,
     loginUser,
     logoutUser,
     refreshAccessToken,
-    changeUserPassword
+    changeUserPassword,
+    getCurretnUser,
+    updateAccountDetails
 }
