@@ -14,11 +14,13 @@ app.use(cookieParser())
 import userRouter from '../src/routes/user.routes.js'
 import commentRouter from '../src/routes/comment.routes.js'
 import TweetRouter from '../src/routes/tweet.routes.js'
+import LikeRouter from "../src/routes/like.routes.js"
 
 //routes declaration
 app.use('/api/v1/users' , userRouter)
 app.use("/api/v1/comments" , commentRouter)
 app.use("/api/v1/tweets" , TweetRouter)
+app.use("/api/v1/likes" , LikeRouter)
 
 
 export  {app}
