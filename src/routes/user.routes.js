@@ -8,7 +8,8 @@ import {
     updateAccountDetails,
     getCurretnUser,
     updateAvatarImage,
-    updateCoverImage
+    updateCoverImage,
+    getUserChannelProfile
 } from '../controllers/user.controller.js'
 import {upload} from '../middlewares/multer.middleware.js'
 import { protect } from '../middlewares/auth.middleware.js';
@@ -37,6 +38,7 @@ router.get("/get_current_user" , protect , getCurretnUser)
 router.patch("/update_details" , protect , updateAccountDetails)
 router.patch("/update_avatar" , protect , updateAvatarImage)
 router.patch("/update_cover" , protect , updateCoverImage)
+router.get("/c/:username" , protect , getUserChannelProfile)
 
 
 
