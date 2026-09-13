@@ -117,7 +117,7 @@ const loginUser = asyncHandler(async (req , res) => {
 })
 
 const logoutUser = asyncHandler(async(req , res) => {
-    loggedOutUser = await User.findByIdAndUpdate(
+    const loggedOutUser = await User.findByIdAndUpdate(
         req.user._id,
         {
             $unset : {
@@ -154,7 +154,7 @@ const refreshAccessToken = asyncHandler(async(req , res) =>{
     let incomingRefreshToken = req.cookies.refreshToken || req.body.refreshToken
 
     try {
-        const decoded = await jwt.verify(
+        const decoded = jwt.verify(
             incomingRefreshToken , process.env.REFRESH_TOKEN_SECRET
         )
         if(!decoded){
@@ -232,7 +232,7 @@ const updateAccountDetails = asyncHandler(async (req ,res) => {
         throw new ApiError(404 , "Enter all the fields")
     }
 
-    const user = await User.findByAndUpdate({
+    const user = await User.findByIdAndUpdate({
         _id : req.user._id
     } , {
         $set : {
@@ -375,7 +375,7 @@ const getUserChannelProfile = asyncHandler(async (req , res) => {
     }
 
     res.status(200).json(
-        new ApiResponse(200 , channel[0]  "Channel fetched successfully")
+        new ApiResponse(200 , channel[0] , "Channel fetched successfully")
     )
 
 })
