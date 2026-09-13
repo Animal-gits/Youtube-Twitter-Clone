@@ -36,7 +36,28 @@ const addComment = asyncHandler(async (req ,res) => {
 
 })
 
+const getComments = asyncHandler(async (req , res) => {
+    const {videoId} = req.params
+
+    if(!mongoose.isValidObjectId(videoId)){
+        throw new ApiError(400 , "Invalid Video Id")
+    }
+
+    const comments = await Comment.find({videoId}).select("content")
+
+    if(comments.length === 0){
+        throw new ApiError(400 , "Could not find comments")
+    }
+
+    res
+        .status(200)
+        .json(
+            new ApiResponse(200 , comments, "Comments fetched succesfully")
+        )
+})
+
 
 export {
-    addComment
+    addComment,
+    getComments
 }
