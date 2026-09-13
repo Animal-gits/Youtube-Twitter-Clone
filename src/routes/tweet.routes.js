@@ -1,10 +1,12 @@
 import {Router} from "express"
-import { createTweet, getMyTweets } from "../controllers/tweet.controller";
+import { createTweet, getMyTweets , getUserTweets, updateTweet } from "../controllers/tweet.controller";
+import { protect } from "../middlewares/auth.middleware";
 
 const router = Router()
 
 router.post("/add_tweet" , protect ,createTweet)
-router.get("/user/:userId" , protect , getUserTweets )
-router.get("/user/my_tweets" , protect , getMyTweets )
+router.get("/tweet/:userId" , protect , getUserTweets )
+router.get("/my_tweets" , protect , getMyTweets )
+router.patch("/update_tweet" , protect , updateTweet )
 
 export {router}
