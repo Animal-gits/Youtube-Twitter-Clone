@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken'
 import { ApiError } from '../helpers/ApiError.js';
 import { User } from '../models/user.model.js';
+import mongoose from 'mongoose';
 
 const protect = async (req , _ , next) => {
     try {
@@ -18,6 +19,10 @@ const protect = async (req , _ , next) => {
 
         if(!user){
             throw new ApiError(404 , "Not Authorized . Token Failed !")
+        }
+
+        if(!mongoose.isValidObjectId(req.user._id)){
+            throw new ApiError(400 , "Invalid User ID")
         }
 
         req.user = user

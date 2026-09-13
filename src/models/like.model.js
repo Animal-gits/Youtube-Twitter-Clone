@@ -7,7 +7,7 @@ const likeSchema = new mongoose.Schema({
     },
     comment : {
         type : mongoose.Schema.Types.ObjectId,
-        ref : "comment"
+        ref : "Comment"
     },
     tweet : {
         type : mongoose.Schema.Types.ObjectId,
@@ -15,9 +15,10 @@ const likeSchema = new mongoose.Schema({
     },
     likedBy : {
         type : mongoose.Schema.Types.ObjectId,
-        ref : "User"
+        ref : "User",
+        required : true
     }
-} ,{timeseries : true})
+} ,{timestamps : true})
 
 const Like = mongoose.model("Like" , likeSchema)
 

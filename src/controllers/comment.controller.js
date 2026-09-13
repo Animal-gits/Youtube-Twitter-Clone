@@ -56,8 +56,66 @@ const getComments = asyncHandler(async (req , res) => {
         )
 })
 
+const updateComment = asyncHandler(async (req , res) => {
+    const {commentId} = req.params
+
+    if(!mongoose.isValidObjectId(commentId)){
+        throw new ApiError(400 , "Invalid Comment Id")
+    }
+    const {content} = req.body
+
+    if(!content || content.trim() === ""){
+        throw new ApiError(400 , "Enter the comment please")
+    }
+
+    const comment = await Comment.findByOneAndUpdate(
+        {
+        _id : commentId,
+        owner : req.user._id
+        } , {
+            content
+        } ,{
+            new : true
+        })
+    
+    if(!comment){
+        throw new ApiError(400 , "Error in updating comment . Try Again!")
+    }
+
+    res
+        .status(201)
+        .json(
+            new ApiResponse(201 , comment , "Comment updated successfully")
+        )
+
+})
+
+
+const deleteComment = asyncHandler(async (req , res) => {
+    const {commentId} = req.params
+    if(!mongoose.isValidObjectId(commentId)){
+        throw new ApiError(400 , "Invalid comment Id")
+    }
+
+    const comment = await Comment.findByOneAndDelete({
+        _id : commentId,
+        owner : req.user._id
+        } )
+
+    if(!comment){
+        throw new ApiError(400 , "Error in deleting comment . Try Again!")
+    }
+
+    res
+        .status(200)
+        .json(
+            new ApiResponse(200 , comment , "Comment deleted successfully")
+        )
+})
 
 export {
     addComment,
-    getComments
+    getComments,
+    deleteComment,
+    updateComment
 }
