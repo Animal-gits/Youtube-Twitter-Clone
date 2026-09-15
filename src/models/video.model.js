@@ -15,12 +15,12 @@ const videoSchema = new mongoose.Schema({
         type : String,
         required : true
     },
-    descriptiom : {
+    description : {
         type : String,
         required : true
     },
     duration : {
-        type : String,
+        type : Number,
         required : true
     },
     isPublished : {
@@ -34,7 +34,7 @@ const videoSchema = new mongoose.Schema({
     },
     owner : {
         type : mongoose.Schema.Types.ObjectId,
-        ref : "users"
+        ref : "User"
     }
 } , {
     timestamps : true

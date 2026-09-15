@@ -5,3 +5,5 @@ import { toggleLike } from "../controllers/like.controller.js";
 const router = Router()
 
 router.post("/toggle/:type:/id" , protect , toggleLike)
+
+export {router}

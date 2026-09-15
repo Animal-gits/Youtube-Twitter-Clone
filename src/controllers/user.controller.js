@@ -68,7 +68,7 @@ const loginUser = asyncHandler(async (req , res) => {
     const {username  , email , password} = req.body
 
     if(
-        [userame , email , password].some((field) => field?.trim() === "")
+        [username , email , password].some((field) => field?.trim() === "")
     ){
         throw new Error(400 , "Enter all the fields")
     }
