@@ -49,6 +49,14 @@ const publishVideo = asyncHandler(async (req , res) => {
             new ApiResponse(201 , video , "Video published successfully")
         )
 })
+
+const getAllVideos = asyncHandler(async (req, res) => {
+    const videos = await Video.find().sort({createdAt : -1})
+    res.status(200).json(
+        new ApiResponse(200 , videos , "Video fetched successfully")
+    )
+})
 export {
-    publishVideo
+    publishVideo,
+    getAllVideos
 }
