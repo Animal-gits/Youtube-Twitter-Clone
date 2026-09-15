@@ -6,8 +6,8 @@ import { uploadOnCloudinary } from "../utils/cloudinary.service.js";
 
 const publishVideo = asyncHandler(async (req , res) => {
     const {title  , description} = req.body
-    const videoLocalPath = req.files?.videoFile.path
-    const thumbnailLocalPath = req.files?.thumbnail.path
+    const videoLocalPath = req.files?.videoFile[0].path
+    const thumbnailLocalPath = req.files?.thumbnail[0].path
 
     if(!videoLocalPath){
         throw new ApiError(400 , "Video file is missing")
