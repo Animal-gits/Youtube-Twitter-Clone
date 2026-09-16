@@ -80,6 +80,9 @@ const getVideoById = asyncHandler(async (req , res) => {
 
 const updateVideoFile = asyncHandler(async (req ,res) => {
     const {videoId} = req.params
+    if(!mongoose.isValidObjectId(videoId)){
+        throw new ApiError(400 , "Invalid video Id")
+    }
     const videoLocalPath = req.file?.path
 
     if(videoLocalPath){
@@ -115,6 +118,9 @@ const updateVideoFile = asyncHandler(async (req ,res) => {
 
 const updateVideoTitle = asyncHandler(async (req ,res) => {
     const {videoId} = req.params
+    if(!mongoose.isValidObjectId(videoId)){
+        throw new ApiError(400 , "Invalid video Id")
+    }
     const title = req.body
 
     if(!title){
@@ -138,10 +144,41 @@ const updateVideoTitle = asyncHandler(async (req ,res) => {
         )
 })
 
+const updateVideoDesc = asyncHandler(async (req ,res) => {
+    const {videoId} = req.params
+    const {description} = req.body
+    if(!mongoose.isValidObjectId(videoId)){
+        throw new ApiError(400 , "Invalid video Id")
+    }
+
+    if(!description){
+        throw new ApiError(400 , "Description is missing")
+    }
+
+    const video = await findByIdAndUpdate({
+        videoId
+    } , {
+        $set : {
+            description : description
+        }
+    } ,{new : true})
+
+    if(!video){
+        throw new ApiError(400 , "Error in updating description")
+    }
+
+    res
+        .status(200)
+        .json(
+            new ApiResponse(200 , video , "Successfully updated video description")
+        )
+})
+
 export {
     publishVideo,
     getAllVideos,
     getVideoById,
     updateVideoFile,
-    updateVideoTitle
+    updateVideoTitle,
+    updateVideoDesc
 }
