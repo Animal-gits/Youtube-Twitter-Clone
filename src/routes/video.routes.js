@@ -1,10 +1,10 @@
 import {Router} from 'express'
 import { protect } from '../middlewares/auth.middleware';
-import { getAllVideos, publishVideo } from '../controllers/video.controller';
+import { getAllVideos, getVideoById, publishVideo } from '../controllers/video.controller';
 
 const router = Router()
 
-router.post("/video/publish"  , protect , 
+router.post("/publish"  , protect , 
     upload.fields([
         {
             name : "videoFile",
@@ -18,4 +18,5 @@ router.post("/video/publish"  , protect ,
     publishVideo
 )
 
-router.get("/video/get_all" , protect , getAllVideos)
+router.get("/get_all" , protect , getAllVideos)
+router.get("/get_by_id" , protect , getVideoById)
