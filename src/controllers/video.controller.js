@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import { ApiError } from "../helpers/ApiError.js";
 import { ApiResponse } from "../helpers/ApiResponse.js";
 import {asyncHandler} from "../helpers/asyncHandler.js"
@@ -56,7 +57,29 @@ const getAllVideos = asyncHandler(async (req, res) => {
         new ApiResponse(200 , videos , "Video fetched successfully")
     )
 })
+
+const getVideoById = asyncHandler(async (req , res) => {
+    const {videoId} = req.params
+
+    if(!mongoose.isValidObjectId(videoId)){
+        throw new ApiError(400 , "Invalid video Id")
+    }
+
+    const video = await Video.findById(videoId)
+
+    if(!video){
+        throw new ApiError(400 , "Failed to find video")
+    }
+
+    res 
+        .status(200)
+        .json(
+            new ApiResponse(200 , video , "Video fethed successfully")
+        )
+})
+
 export {
     publishVideo,
-    getAllVideos
+    getAllVideos,
+    getVideoById
 }
