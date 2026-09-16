@@ -1,6 +1,6 @@
 import {Router} from "express"
-import { createTweet, deleteTweet, getMyTweets , getUserTweets, updateTweet } from "../controllers/tweet.controller";
-import { protect } from "../middlewares/auth.middleware";
+import { createTweet, deleteTweet, getMyTweets , getUserTweets, updateTweet } from "../controllers/tweet.controller.js";
+import { protect } from "../middlewares/auth.middleware.js";
 
 const router = Router()
 
@@ -10,4 +10,4 @@ router.get("/my_tweets" , protect , getMyTweets )
 router.patch("/update_tweet" , protect , updateTweet )
 router.delete("/delete_tweet"  , protect , deleteTweet)
 
-export {router}
+export default router

@@ -15,7 +15,7 @@ import userRouter from '../src/routes/user.routes.js'
 import commentRouter from '../src/routes/comment.routes.js'
 import TweetRouter from '../src/routes/tweet.routes.js'
 import LikeRouter from "../src/routes/like.routes.js"
-import VideoRouter from "../src/routes/video/routes.js"
+import VideoRouter from "../src/routes/video.routes.js"
 
 //routes declaration
 app.use('/api/v1/users' , userRouter)
