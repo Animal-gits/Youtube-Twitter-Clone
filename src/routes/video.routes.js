@@ -1,6 +1,6 @@
 import {Router} from 'express'
 import { protect } from '../middlewares/auth.middleware';
-import { getAllVideos, getVideoById, publishVideo, updateVideoDesc, updateVideoFile, updateVideoTitle } from '../controllers/video.controller';
+import { getAllVideos, getVideoById, publishVideo, updateVideoDesc, updateVideoFile, updateVideoThumbnail, updateVideoTitle } from '../controllers/video.controller';
 
 const router = Router()
 
@@ -19,7 +19,8 @@ router.post("/publish"  , protect ,
 )
 
 router.get("/get_all" , protect , getAllVideos)
-router.get("/get_by_id" , protect , getVideoById)
-router.patch("/update_video_file" , protect , updateVideoFile)
-router.patch("/update_title" , protect , updateVideoTitle)
-router.patch("/update_desc", protect ,updateVideoDesc )
+router.get("/get_by_id/:videoId", protect , getVideoById)
+router.patch("/update_video_file/:videoId" , protect , updateVideoFile)
+router.patch("/update_title/:videoId" , protect , updateVideoTitle)
+router.patch("/update_desc/:videoId", protect ,updateVideoDesc)
+router.patch("/update_thumbnail/:videoId" , protect , updateVideoThumbnail)

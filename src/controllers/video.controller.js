@@ -174,11 +174,48 @@ const updateVideoDesc = asyncHandler(async (req ,res) => {
         )
 })
 
+const updateVideoThumbnail = asyncHandler(async (req , res) => {
+    const {videoId} = req.params
+
+    if(!mongoose.isValidObjectId(videoId)){
+        throw new ApiError(400 , "Invalid video Id")
+    }
+
+    const thumbnailLocalPath = req.file?.path
+    if(!thumbnailLocalPath){
+        throw new ApiError(400 , "Thumbail is missing")
+    }
+
+    const thumbnail = await uploadOnCloudinary(thumbnailLocalPath)
+
+    if(!thumbnail.url){
+        throw new ApiError(400 , "Error in uploading thumbnail file")
+    }
+
+    const thumbnailFile = await Video.findByIdAndUpdate({videoId}, {
+        $set : {
+            thumbnail : thumbnail.url
+        }
+    } ,{new : true})
+
+    if(!thumbnailFile){
+        throw new ApiError(400 , "Failed to update thumbnail file")
+    }
+
+    res
+        .status(200)
+        .json(
+            new ApiResponse(200 , thumbnailFile , "Successfully updated thumbnail")
+        )
+
+})
+
 export {
     publishVideo,
     getAllVideos,
     getVideoById,
     updateVideoFile,
     updateVideoTitle,
-    updateVideoDesc
+    updateVideoDesc,
+    updateVideoThumbnail
 }
