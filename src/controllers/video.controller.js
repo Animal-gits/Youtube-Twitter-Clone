@@ -113,9 +113,35 @@ const updateVideoFile = asyncHandler(async (req ,res) => {
         )
 })
 
+const updateVideoTitle = asyncHandler(async (req ,res) => {
+    const {videoId} = req.params
+    const title = req.body
+
+    if(!title){
+        throw new ApiError(400 , "Title is missing")
+    }
+
+    const video = await findByIdAndUpdate({videoId} ,{
+        $set : {
+            title : title
+        }
+    } ,{new : true})
+
+    if(!video){
+        throw new ApiError(400 , "Error in updating title")
+    }
+
+    res 
+        .status(200)
+        .json(
+            new ApiResponse(200 , video , "Video title successfully updated")
+        )
+})
+
 export {
     publishVideo,
     getAllVideos,
     getVideoById,
-    updateVideoFile
+    updateVideoFile,
+    updateVideoTitle
 }
