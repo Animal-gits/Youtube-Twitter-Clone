@@ -96,7 +96,8 @@ const updateVideoFile = asyncHandler(async (req ,res) => {
     }
 
     const videoFile = await findOneAndUpdate({
-        _id : videoId
+        _id : videoId,
+        owner : req.user._id
     } , {
         $set : {
             videoFile : video.url
@@ -127,7 +128,10 @@ const updateVideoTitle = asyncHandler(async (req ,res) => {
         throw new ApiError(400 , "Title is missing")
     }
 
-    const video = await findByIdAndUpdate({videoId} ,{
+    const video = await findOneAndUpdate({
+        _id : videoId,
+        owner : req.user._id
+    } ,{
         $set : {
             title : title
         }
@@ -155,8 +159,9 @@ const updateVideoDesc = asyncHandler(async (req ,res) => {
         throw new ApiError(400 , "Description is missing")
     }
 
-    const video = await findByIdAndUpdate({
-        videoId
+    const video = await findOneAndUpdate({
+        _id : videoId,
+        owner : req.user._id
     } , {
         $set : {
             description : description
@@ -192,7 +197,10 @@ const updateVideoThumbnail = asyncHandler(async (req , res) => {
         throw new ApiError(400 , "Error in uploading thumbnail file")
     }
 
-    const thumbnailFile = await Video.findByIdAndUpdate({videoId}, {
+    const thumbnailFile = await Video.findOneAndUpdate({
+        _id : videoId,
+        owner : req.user._id
+    }, {
         $set : {
             thumbnail : thumbnail.url
         }
@@ -210,6 +218,37 @@ const updateVideoThumbnail = asyncHandler(async (req , res) => {
 
 })
 
+const togglePublishStatus = asyncHandler(async (req, res) => {
+    const { videoId } = req.params
+    if(!mongoose.isValidObjectId(videoId)){
+        throw new ApiError(400 , "Invalid video Id")
+    }
+
+    const video = await Video.findOneAndUpdate({
+        _id : videoId,
+        owner : req.user._id
+    } , {
+        $set : {
+            isPublishished :{
+                $not : "$isPublished"
+            }
+        }
+    } ,{new : true})
+
+    if(!video){
+        throw new ApiError(400 , "Video not found")
+    }
+
+    res
+        .status(200).
+        json(
+            new ApiResponse(200 , video , `Video ${video.isPublished ?"Published" : "Unpublished"} Successfully`)
+        )
+
+
+
+})
+
 export {
     publishVideo,
     getAllVideos,
@@ -217,5 +256,6 @@ export {
     updateVideoFile,
     updateVideoTitle,
     updateVideoDesc,
-    updateVideoThumbnail
+    updateVideoThumbnail,
+    togglePublishStatus
 }
