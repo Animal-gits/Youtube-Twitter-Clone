@@ -85,7 +85,7 @@ const updateVideoFile = asyncHandler(async (req ,res) => {
     }
     const videoLocalPath = req.file?.path
 
-    if(videoLocalPath){
+    if(!videoLocalPath){
         throw new ApiError(400 , "Video file is missing")
     }
 
@@ -95,12 +95,13 @@ const updateVideoFile = asyncHandler(async (req ,res) => {
         throw new ApiError(400 , "Error while uploading video")
     }
 
-    const videoFile = await findOneAndUpdate({
+    const videoFile = await Video.findOneAndUpdate({
         _id : videoId,
         owner : req.user._id
     } , {
         $set : {
-            videoFile : video.url
+            videoFile : video.url,
+            duration: video.duration
         }
     } ,{
         new : true
@@ -122,13 +123,13 @@ const updateVideoTitle = asyncHandler(async (req ,res) => {
     if(!mongoose.isValidObjectId(videoId)){
         throw new ApiError(400 , "Invalid video Id")
     }
-    const title = req.body
+    const {title} = req.body
 
-    if(!title){
+    if(!title || title.trim() === ""){
         throw new ApiError(400 , "Title is missing")
     }
 
-    const video = await findOneAndUpdate({
+    const video = await Video.findOneAndUpdate({
         _id : videoId,
         owner : req.user._id
     } ,{
@@ -155,11 +156,11 @@ const updateVideoDesc = asyncHandler(async (req ,res) => {
         throw new ApiError(400 , "Invalid video Id")
     }
 
-    if(!description){
+    if(!description || description.trim() === ""){
         throw new ApiError(400 , "Description is missing")
     }
 
-    const video = await findOneAndUpdate({
+    const video = await Video.findOneAndUpdate({
         _id : videoId,
         owner : req.user._id
     } , {
@@ -225,15 +226,21 @@ const togglePublishStatus = asyncHandler(async (req, res) => {
     }
 
     const video = await Video.findOneAndUpdate({
-        _id : videoId,
-        owner : req.user._id
-    } , {
-        $set : {
-            isPublishished :{
-                $not : "$isPublished"
+        _id: videoId,
+        owner: req.user._id
+    },
+    [
+        {
+            $set: {
+                isPublished: {
+                    $not: "$isPublished"
+                }
             }
         }
-    } ,{new : true})
+    ],
+    {
+        new: true
+    })
 
     if(!video){
         throw new ApiError(400 , "Video not found")
