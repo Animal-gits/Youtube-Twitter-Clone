@@ -78,8 +78,44 @@ const getVideoById = asyncHandler(async (req , res) => {
         )
 })
 
+const updateVideoFile = asyncHandler(async (req ,res) => {
+    const {videoId} = req.params
+    const videoLocalPath = req.file?.path
+
+    if(videoLocalPath){
+        throw new ApiError(400 , "Video file is missing")
+    }
+
+    const video = await uploadOnCloudinary(videoLocalPath)
+
+    if(!video.url){
+        throw new ApiError(400 , "Error while uploading video")
+    }
+
+    const videoFile = await findOneAndUpdate({
+        _id : videoId
+    } , {
+        $set : {
+            videoFile : video.url
+        }
+    } ,{
+        new : true
+    })
+
+    if(!videoFile){
+        throw new ApiError(400 , "Failed to update video")
+    }
+
+    res
+        .status(200)
+        .json(
+            new ApiResponse(200 , videoFile , "Video updated successfully")
+        )
+})
+
 export {
     publishVideo,
     getAllVideos,
-    getVideoById
+    getVideoById,
+    updateVideoFile
 }
