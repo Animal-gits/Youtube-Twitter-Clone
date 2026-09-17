@@ -1,7 +1,6 @@
 import {Router} from 'express'
 import { protect } from '../middlewares/auth.middleware.js';
 import {upload} from '../middlewares/multer.middleware.js'
-
 import { getAllVideos, getVideoById, publishVideo, togglePublishStatus, updateVideoDesc, updateVideoFile, updateVideoThumbnail, updateVideoTitle } from '../controllers/video.controller.js';
 
 const router = Router()
