@@ -86,25 +86,60 @@ const addVideoToPlaylist = asyncHandler(async (req, res) => {
     }
 
     const playlist = await Playlist.findByIdAndUpdate({
-        playlistId
+        playlistId,
+        owner: req.user._id
     }, {
         $addToSet: {
             videos: videoId
         }
     }, { new: true })
 
-    if(!playlist){
-        throw new ApiError(400 , "Failed to add video to playlist")
+    if (!playlist) {
+        throw new ApiError(400, "Failed to add video to playlist")
     }
 
     res
         .status(200)
-        .json(200 , playlist , "Successfully added video to playlist")
+        .json(200, playlist, "Successfully added video to playlist")
+})
+
+const removeVideoToPlaylist = asyncHandler(async (req, res) => {
+    const { playlistId, videoId } = req.params
+
+    if (!mongoose.isValidObjectId(playlistId)) {
+        throw new ApiError(400, "Invalid Playlist Id")
+    }
+
+    if (!mongoose.isValidObjectId(videoId)) {
+        throw new ApiError(400, "Invalid Video Id")
+    }
+
+    const playlist = await Playlist.findByIdAndUpdate({
+        playlistId,
+        owner: req.user._id
+    }, {
+        $pull: {
+            videos: videoId
+        }
+    }, {
+        new: true
+    })
+
+    if (!playlist) {
+        throw new ApiError(400, "Error in removing video from playlist")
+    }
+
+    res
+        .status(200)
+        .json(
+            new ApiResponse(200, playlist, "Video successfully removed from playlist")
+        )
 })
 
 export {
     createPlaylist,
     getUserPlaylists,
     getPlaylistById,
-    addVideoToPlaylist
+    addVideoToPlaylist,
+    removeVideoToPlaylist
 }

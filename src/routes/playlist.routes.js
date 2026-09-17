@@ -8,6 +8,7 @@ const router = Router()
 router.post("/create" , protect , createPlaylist)
 router.get("/get_user_playlists/:userId" , protect , getUserPlaylists)
 router.get("/get_playlist" , protect , getPlaylistById)
-router.patch("/add_video/:playlist/:videoId" , protect , addVideoToPlaylist)
+router.patch("/add_video/:playlistId/:videoId" , protect , addVideoToPlaylist)
+router.delete("/remove_video/:playlistId/:videoId" , protect , removeVideoToPlaylist)
 
 export default router
