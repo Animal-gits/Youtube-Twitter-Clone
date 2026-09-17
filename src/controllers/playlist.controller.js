@@ -54,7 +54,20 @@ const getUserPlaylists = asyncHandler(async (req, res) => {
         )
 })
 
+const getPlaylistById = asyncHandler(async (req , res) => {
+    const {playlistId} = req.params
+
+    if(!mongoose.isValidObjectId(playlistId)){
+        throw new ApiError(400 , "Invalid Playlist Id")
+    }
+
+    const playlist = await Playlist.findById({
+        playlistId
+    })
+})
+
 export {
     createPlaylist,
-    getUserPlaylists
+    getUserPlaylists,
+    getPlaylistById
 }
