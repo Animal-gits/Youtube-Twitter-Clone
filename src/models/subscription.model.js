@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import mongosose from "mongoose"
 
 const subscriptionSchema = new mongoose.Schema({
     subscriber : {
