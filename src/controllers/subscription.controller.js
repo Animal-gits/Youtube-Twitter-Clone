@@ -65,7 +65,29 @@ const getUserChannelSubscribers = asyncHandler(async (req , res) => {
         )
 })
 
+const getSubscribedChannels = asyncHandler(async (req , res) => {
+    const {subscriberId} = req.params
+    if(!mongoose.isValidObjectId(channelId)){
+        throw new ApiError(400 , "invalid Id format")
+    }
+
+    const channels = await Subscription.find({
+        subscribers : subscribersId
+    })
+
+    if(!channels){
+        throw new ApiError(400 , "Failed to get subscribed channel")
+    }
+
+    res
+        .status(200)
+        .json(
+            new ApiResponse(200 , channels, "Channels fetched successfully")
+        )
+})
+
 export {
     toggleSubscription,
-    getUserChannelSubscribers
+    getUserChannelSubscribers,
+    getSubscribedChannels
 }
