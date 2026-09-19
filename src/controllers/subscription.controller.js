@@ -4,10 +4,10 @@ import { asyncHandler } from "../helpers/asyncHandler.js";
 import { ApiError } from "../helpers/ApiError.js";
 import { ApiResponse } from "../helpers/ApiResponse";
 
-const toggleSubscription = asyncHandler(async (res , req) => {
+const toggleSubscription = asyncHandler(async (req , res) => {
     const {channelId} = req.params
 
-    if(!mongoose.isObjectIdOrHexString(id)){
+    if(!mongoose.isObjectIdOrHexString(channelId)){
         throw new ApiError(400 , "Invalid Id format")
     }
 
@@ -50,11 +50,11 @@ const getUserChannelSubscribers = asyncHandler(async (req , res) => {
         throw new ApiError(400 , "invalid Id format")
     }
 
-    const subscribers = await Subscription.findOne({
+    const subscribers = await Subscription.find({
         channel : channelId
     })
 
-    if(!subscribers){
+    if(subscribers.length === 0){
         throw new ApiError(400 , "Failed to get channel subscribers")
     }
 
@@ -67,12 +67,12 @@ const getUserChannelSubscribers = asyncHandler(async (req , res) => {
 
 const getSubscribedChannels = asyncHandler(async (req , res) => {
     const {subscriberId} = req.params
-    if(!mongoose.isValidObjectId(channelId)){
+    if(!mongoose.isValidObjectId(subscriberId)){
         throw new ApiError(400 , "invalid Id format")
     }
 
     const channels = await Subscription.find({
-        subscribers : subscribersId
+        subscribers : subscriberId
     })
 
     if(!channels){

@@ -11,17 +11,19 @@ app.use(express.static('public'))
 app.use(cookieParser())
 
 // routes imports 
-import userRouter from '../src/routes/user.routes.js'
-import commentRouter from '../src/routes/comment.routes.js'
+import HealthRouter from "../src/routes/healthcheck.routes.js"
+import UserRouter from '../src/routes/user.routes.js'
+import CommentRouter from '../src/routes/comment.routes.js'
 import TweetRouter from '../src/routes/tweet.routes.js'
 import LikeRouter from "../src/routes/like.routes.js"
 import VideoRouter from "../src/routes/video.routes.js"
 import PlaylistRouter from "../src/routes/playlist.routes.js"
-import SubscriptionRouter from "../src/models/subscription.model.js"
+import SubscriptionRouter from "../src/routes/subscription.routes.js"
 
 //routes declaration
-app.use('/api/v1/users' , userRouter)
-app.use("/api/v1/comments" , commentRouter)
+app.use("/api/v1/health" , HealthRouter)
+app.use('/api/v1/users' , UserRouter)
+app.use("/api/v1/comments" , CommentRouter)
 app.use("/api/v1/tweets" , TweetRouter)
 app.use("/api/v1/likes" , LikeRouter)
 app.use("/api/v1/videos" , VideoRouter)
