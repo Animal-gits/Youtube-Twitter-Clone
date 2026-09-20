@@ -5,6 +5,7 @@ import { uploadOnCloudinary } from '../utils/cloudinary.service.js';
 import {User} from '../models/user.model.js'
 import {generateAccessToken , generateRefreshToken} from '../config/generateToken.js'
 import jwt from 'jsonwebtoken'
+import env from '../config/env.js'
 
 
 const registerUser = asyncHandler(async (req , res) => {
@@ -155,7 +156,7 @@ const refreshAccessToken = asyncHandler(async(req , res) =>{
 
     try {
         const decoded = jwt.verify(
-            incomingRefreshToken , process.env.REFRESH_TOKEN_SECRET
+            incomingRefreshToken , env.REFRESH_TOKEN_SECRET
         )
         if(!decoded){
             throw new ApiError(400 , "Not Authorized . Token Failed!!")

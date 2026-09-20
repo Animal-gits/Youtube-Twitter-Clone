@@ -2,6 +2,7 @@ import jwt from 'jsonwebtoken'
 import { ApiError } from '../helpers/ApiError.js';
 import { User } from '../models/user.model.js';
 import mongoose from 'mongoose';
+import env from "../config/env.js"
 
 const protect = async (req , _ , next) => {
     try {
@@ -10,7 +11,7 @@ const protect = async (req , _ , next) => {
             throw new ApiError(404 , "Not Authorized . Token Failed !")
         }
 
-        const decoded = await jwt.verify(token , process.env.ACCESS_TOKEN_SECRET)
+        const decoded = await jwt.verify(token , env.ACCESS_TOKEN_SECRET)
         if(!decoded){
             throw new ApiError(404 , "Not Authorized . Token Faild !")
         }

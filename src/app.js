@@ -1,6 +1,7 @@
 import express from 'express'
 import morgan from 'morgan'
 import cookieParser from 'cookie-parser'
+import { errorHandler, notFound } from './middlewares/errorHandler.middleware.js';
 
 const app = express()
 
@@ -19,7 +20,7 @@ import LikeRouter from "../src/routes/like.routes.js"
 import VideoRouter from "../src/routes/video.routes.js"
 import PlaylistRouter from "../src/routes/playlist.routes.js"
 import SubscriptionRouter from "../src/routes/subscription.routes.js"
-
+import DashboardRouter from "../src/routes/dashboard.routes.js"
 //routes declaration
 app.use("/api/v1/health" , HealthRouter)
 app.use('/api/v1/users' , UserRouter)
@@ -29,5 +30,9 @@ app.use("/api/v1/likes" , LikeRouter)
 app.use("/api/v1/videos" , VideoRouter)
 app.use("/api/v1/playlist" , PlaylistRouter)
 app.use("/api/v1/subscription" , SubscriptionRouter)
+app.use("/api/v1/dashboard"  , DashboardRouter)
+
+app.use(notFound)
+app.use(errorHandler)
 
 export  {app}

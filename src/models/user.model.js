@@ -1,5 +1,6 @@
 import mongoose from 'mongoose'
 import bcrypt from 'bcrypt'
+import env from "../config/env.js"
 
 const userSchema = new mongoose.Schema({
     username : {
@@ -69,9 +70,9 @@ userSchema.methods.generateAccessToken = function(){
         username : user.userame,
         fullName : user.fullName
     },
-    process.env.ACCESS_TOKEN_SECRET,
+    env.ACCESS_TOKEN_SECRET,
     {
-        expiresIn : process.env.ACCESS_TOKEN_EXPIRY
+        expiresIn : env.ACCESS_TOKEN_EXPIRY
     }
 
     )
@@ -83,9 +84,9 @@ userSchema.methods.generateRefreshToken = function (){
         {
             _id : user._id
         },
-        process.env.REFRESH_TOKEN_SECRET,
+        env.REFRESH_TOKEN_SECRET,
         {
-            expiresIn : process.env.REFRESH_TOKEN_EXPIRY
+            expiresIn : env.REFRESH_TOKEN_EXPIRY
         }
     )
 }

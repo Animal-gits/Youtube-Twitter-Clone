@@ -1,9 +1,10 @@
 import mongoose from 'mongoose'
+import env from "./env"
 
 const connectDB = async() => {
     try {
-        console.log("MONGO_URI:" , process.env.MONGO_URI)
-        const connectionInstance = await mongoose.connect(process.env.MONGO_URI , {
+        console.log("MONGO_URI:" , env.MONGO_URI)
+        const connectionInstance = await mongoose.connect(env.MONGO_URI , {
             dbName : "yt-clone"
         })
 
