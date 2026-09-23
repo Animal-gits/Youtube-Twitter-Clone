@@ -6,6 +6,7 @@ import { User } from '../models/user.model.js'
 import { generateAccessToken, generateRefreshToken } from '../config/generateToken.js'
 import jwt from 'jsonwebtoken'
 import env from '../config/env.js'
+import cookieOptions from "../config/cookieOptions.js"
 
 
 const registerUser = asyncHandler(async (req, res) => {
@@ -108,10 +109,6 @@ const loginUser = asyncHandler(async (req, res) => {
     // const loggedInUser = await User.findById(user._id).select("-password -refreshToken")
     //isko comment ouut isliye kuyunka yay kaam ab oper update query ker rahi hai kyunk refresh token ko db main store kernwana tha 
 
-    const cookieOptions = {
-        httpOnly: true,
-        secure: true
-    }
     if (!loggedInUser) {
         throw new ApiError(400, "Invalid Credentials")
     } else {
@@ -143,17 +140,13 @@ const logoutUser = asyncHandler(async (req, res) => {
         }
     ).select("-password -refreshToken")
 
-    const cookiesOptions = {
-        httpOnly: true,
-        secure: true
-    }
 
     if (!loggedOutUser) {
         throw new ApiError(400, "User Logout Process Failed")
     } else {
         return res
-            .clearCookies("accessToken", cookiesOptions)
-            .clearCookies("refreshToken", cookiesOptions)
+            .clearCookies("accessToken", cookieOptions)
+            .clearCookies("refreshToken", cookieOptions)
             .status(200)
             .json(
                 new ApiResponse(
