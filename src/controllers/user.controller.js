@@ -190,15 +190,11 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
             }
         )
 
-        const cookiesOptions = {
-            httpOnly: true,
-            secure: true
-        }
 
         return res
             .status(201)
-            .cookie("refreshToken", newRefreshToken, cookiesOptions)
-            .cookie("accessToken", accessToken, cookiesOptions)
+            .cookie("refreshToken", newRefreshToken, cookieOptions)
+            .cookie("accessToken", accessToken, cookieOptions)
             .json(
                 new ApiResponse(
                     200,
