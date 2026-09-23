@@ -99,6 +99,7 @@ ACCESS_TOKEN_EXPIRY=<access-token expiry>
 REFRESH_TOKEN_SECRET=<your refresh-token secret>
 REFRESH_TOKEN_EXPIRY=<refresh-token expiry>
 NODE_ENV=<development-or-production>
+CORS_ORIGIN=<*-for-development>
 ```
 
 Do not commit `.env` files or secret values. `.env`, `.env.test`, and `.env.production` are ignored by Git.
@@ -117,6 +118,7 @@ Do not commit `.env` files or secret values. `.env`, `.env.test`, and `.env.prod
 | `REFRESH_TOKEN_SECRET` | Intended refresh-token signing/verifying secret. |
 | `REFRESH_TOKEN_EXPIRY` | Intended refresh-token expiration. |
 | `NODE_ENV` | Controls production error-message and stack-trace behavior. |
+| `CORS_ORIGIN` | Allows cors-origin. |
 
 The current `env.js` object assigns `REFRESH_TOKEN_SECRET` from `process.env.ACCESS_TOKEN_SECRET` and `REFRESH_TOKEN_EXPIRY` from `process.env.ACCESS_TOKEN_EXPIRY`. This differs from the validation checks and should be reviewed before deployment.
 

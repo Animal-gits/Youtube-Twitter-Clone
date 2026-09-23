@@ -2,8 +2,15 @@ import express from 'express'
 import morgan from 'morgan'
 import cookieParser from 'cookie-parser'
 import { errorHandler, notFound } from './middlewares/errorHandler.middleware.js';
+import env from "./config/env.js"
+import cors from "cors"
 
 const app = express()
+
+app.use(cors({
+    origin : env.CORS_ORIGIN,
+    credentials : true
+}))
 
 app.use(morgan('dev'))
 app.use(express.json())
@@ -21,6 +28,7 @@ import VideoRouter from "../src/routes/video.routes.js"
 import PlaylistRouter from "../src/routes/playlist.routes.js"
 import SubscriptionRouter from "../src/routes/subscription.routes.js"
 import DashboardRouter from "../src/routes/dashboard.routes.js"
+import env from './config/env.js';
 //routes declaration
 app.use("/api/v1/health" , HealthRouter)
 app.use('/api/v1/users' , UserRouter)
